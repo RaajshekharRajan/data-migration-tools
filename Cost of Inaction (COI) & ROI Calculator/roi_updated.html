@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Migration ROI Calculator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        /* --- ENTERPRISE THEME VARIABLES --- */
+        :root {
+            --c-bg: #f8fafc;          /* Slate 50 */
+            --c-surface: #ffffff;     /* White */
+            --c-text-main: #0f172a;   /* Slate 900 */
+            --c-text-muted: #64748b;  /* Slate 500 */
+            --c-border: #e2e8f0;      /* Slate 200 */
+            --c-primary: #0f172a;     /* Slate 900 */
+            --c-primary-hover: #1e293b;
+            --c-accent: #3b82f6;      /* Blue 500 */
+            --c-success: #10b981;     /* Emerald 500 */
+            --c-error: #ef4444;       /* Red 500 */
+            --c-warning: #f59e0b;     /* Amber 500 */
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --radius: 12px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--c-bg);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: var(--font-ui);
+            color: var(--c-text-main);
+            margin: 0;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        .app-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--c-border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.02em;
+        }
+        
+        .brand-icon {
+            background: linear-gradient(135deg, #0f172a, #334155);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-primary {
+            background: var(--c-primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background: var(--c-primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1px solid var(--c-border);
+            color: var(--c-text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-secondary:hover { background: #f8fafc; color: var(--c-text-main); border-color: var(--c-text-muted); }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .container { grid-template-columns: 1fr; }
+        }
+
+        /* --- SIDEBAR (INPUTS) --- */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .preset-bar {
+            display: flex;
+            background: var(--c-surface);
+            padding: 4px;
+            border-radius: var(--radius);
+            border: 1px solid var(--c-border);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .preset-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover { color: var(--c-text-main); }
+        .preset-btn.active { background: #f1f5f9; color: var(--c-primary); }
+
+        .input-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+        }
+        .input-card:hover { box-shadow: var(--shadow-md); }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--c-border);
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--c-text-main);
+        }
+
+        .input-group { margin-bottom: 16px; }
+        
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .input-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--c-text-muted);
+        }
+        
+        .value-badge {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--c-primary);
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .text-input-wrapper {
+            position: relative;
+        }
+        .currency-symbol {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--c-text-muted);
+            font-size: 13px;
+            font-family: var(--font-code);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px 12px 10px 24px;
+            border: 1px solid var(--c-border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: var(--font-code);
+            transition: border 0.2s;
+            outline: none;
+        }
+        .form-input:focus { border-color: var(--c-accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+        /* Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            margin-top: 8px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: var(--c-primary);
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #e2e8f0;
+            transition: box-shadow 0.2s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 2px white, 0 0 0 4px var(--c-accent); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        /* --- DASHBOARD (RESULTS) --- */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } }
+
+        .stat-card {
+            background: var(--c-surface);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--c-border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+        }
+        .stat-card.danger::before { background: var(--c-error); }
+        .stat-card.success::before { background: var(--c-success); }
+        .stat-card.info::before { background: var(--c-accent); }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--c-text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--c-text-main);
+            letter-spacing: -0.03em;
+        }
+        
+        .stat-sub { font-size: 12px; color: var(--c-text-muted); margin-top: 4px; }
+
+        /* Chart Section */
+        .chart-card {
+            background: var(--c-surface);
+            padding: 32px;
+            border-radius: var(--radius);
+            border: 1px solid var(--c-border);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 16px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--c-text-muted);
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        /* CTA */
+        .cta-card {
+            background: #0f172a;
+            border-radius: var(--radius);
+            padding: 32px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+        }
+        @media (max-width: 600px) { .cta-card { flex-direction: column; text-align: center; gap: 16px; } }
+
+        .cta-btn {
+            background: white;
+            color: #0f172a;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); }
+
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon">ROI</div>
+            <div>Cost of Inaction & Migration ROI Calculator</div>
+        </div>
+        <div class="action-group">
+            <button onclick="copyLink()" id="shareBtn" class="btn-secondary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                Share
+            </button>
+            <button onclick="generatePDF()" class="btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Export Report
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <aside class="sidebar">
+            
+            <div class="preset-bar">
+                <button class="preset-btn" onclick="applyPreset('startup')" id="btn-startup">Startup</button>
+                <button class="preset-btn active" onclick="applyPreset('mid')" id="btn-mid">Mid-Market</button>
+                <button class="preset-btn" onclick="applyPreset('enterprise')" id="btn-enterprise">Enterprise</button>
+            </div>
+
+            <div class="input-card">
+                <div class="card-header">
+                    <div style="width:8px; height:8px; border-radius:50%; background:#ef4444;"></div>
+                    <span class="section-title">Current State (Legacy)</span>
+                </div>
+                
+                <div class="input-group">
+                    <div class="label-row"><span class="input-label">Monthly License Cost</span></div>
+                    <div class="text-input-wrapper">
+                        <span class="currency-symbol">$</span>
+                        <input type="number" id="legacyMonthly" class="form-input" oninput="calculate()">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-row">
+                        <span class="input-label">Maintenance Hours/Wk</span>
+                        <span class="value-badge" id="hoursDisplay">0</span>
+                    </div>
+                    <input type="range" id="wastedHours" min="0" max="80" oninput="updateRangeVal('hoursDisplay', this.value); calculate()">
+                </div>
+
+                <div class="input-group">
+                    <div class="label-row"><span class="input-label">Hourly Labor Cost</span></div>
+                    <div class="text-input-wrapper">
+                        <span class="currency-symbol">$</span>
+                        <input type="number" id="hourlyRate" class="form-input" oninput="calculate()">
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-top:20px; padding-top:16px; border-top:1px solid #f1f5f9;">
+                    <div class="label-row">
+                        <span class="input-label">Annual Data Growth</span>
+                        <span class="value-badge" id="growthDisplay" style="color:#ef4444; background:#fef2f2;">10%</span>
+                    </div>
+                    <input type="range" id="growthRate" min="0" max="50" step="5" oninput="updateRangeVal('growthDisplay', this.value + '%'); calculate()">
+                </div>
+            </div>
+
+            <div class="input-card">
+                <div class="card-header">
+                    <div style="width:8px; height:8px; border-radius:50%; background:#f59e0b;"></div>
+                    <span class="section-title">Opportunity Risk</span>
+                </div>
+                
+                <div class="input-group">
+                    <div class="label-row"><span class="input-label">Annual Revenue</span></div>
+                    <div class="text-input-wrapper">
+                        <span class="currency-symbol">$</span>
+                        <input type="number" id="annualRevenue" class="form-input" oninput="calculate()">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-row">
+                        <span class="input-label">Data Error Impact</span>
+                        <span class="value-badge" id="errorDisplay" style="color:#b45309; background:#fffbeb;">0%</span>
+                    </div>
+                    <input type="range" id="errorRate" min="0" max="5" step="0.1" oninput="updateRangeVal('errorDisplay', this.value + '%'); calculate()">
+                </div>
+            </div>
+
+            <div class="input-card">
+                <div class="card-header">
+                    <div style="width:8px; height:8px; border-radius:50%; background:#10b981;"></div>
+                    <span class="section-title">New Solution Investment</span>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                    <div>
+                        <span class="input-label" style="display:block; margin-bottom:6px;">Migration Fee</span>
+                        <input type="number" id="migrationCost" class="form-input" style="padding-left:10px;" oninput="calculate()">
+                    </div>
+                    <div>
+                        <span class="input-label" style="display:block; margin-bottom:6px;">SaaS / Mo</span>
+                        <input type="number" id="newSaaSCost" class="form-input" style="padding-left:10px;" oninput="calculate()">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-row">
+                        <span class="input-label">Transition Overlap</span>
+                        <span class="value-badge" id="durationDisplay" style="color:#15803d; background:#f0fdf4;">1 Mo</span>
+                    </div>
+                    <input type="range" id="migrationDuration" min="0" max="12" oninput="updateRangeVal('durationDisplay', this.value + ' Mo'); calculate()">
+                </div>
+            </div>
+
+        </aside>
+
+        <main class="dashboard">
+            
+            <div class="stats-grid">
+                <div class="stat-card danger">
+                    <div class="stat-label">3-Year Cost of Inaction</div>
+                    <div class="stat-value" id="coiTotal">$0</div>
+                    <div class="stat-sub">Cumulative burn if you wait</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-label">Net Projected Savings</div>
+                    <div class="stat-value" id="netSavings">$0</div>
+                    <div class="stat-sub">After migration costs</div>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-label">ROI Breakeven</div>
+                    <div class="stat-value" id="roiMetric">0 Mo</div>
+                    <div class="stat-sub">Time to positive cashflow</div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2 class="section-title" style="font-size:16px;">Cumulative Cost Trajectory (36 Months)</h2>
+                    <div class="legend">
+                        <div class="legend-item"><div class="dot" style="background:#ef4444;"></div>Inaction (Legacy)</div>
+                        <div class="legend-item"><div class="dot" style="background:#10b981;"></div>Migration Path</div>
+                    </div>
+                </div>
+                <div style="height:400px; width:100%;">
+                    <canvas id="roiChart"></canvas>
+                </div>
+            </div>
+
+            <div class="cta-card">
+                <div>
+                    <h3 style="margin:0 0 8px 0; font-size:20px;">Ready to stop the bleed?</h3>
+                    <p style="margin:0; opacity:0.8; font-size:14px;">Book a free data architecture audit to validate these numbers.</p>
+                </div>
+                <a href="#" class="cta-btn">Book Audit</a>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        // --- DATA PRESETS ---
+        const presets = {
+            startup: { rev: 500000, leg: 500, hours: 5, rate: 45, err: 1.5, mig: 2000, new: 250, dur: 1, growth: 10 },
+            mid: { rev: 5000000, leg: 4000, hours: 20, rate: 75, err: 1.0, mig: 25000, new: 1500, dur: 3, growth: 15 },
+            enterprise: { rev: 75000000, leg: 18000, hours: 60, rate: 110, err: 0.5, mig: 120000, new: 8000, dur: 6, growth: 20 }
+        };
+
+        let myChart = null;
+        let chartData = {};
+
+        // --- INIT ---
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            if(params.has('rev')) {
+                loadFromParams(params);
+            } else {
+                applyPreset('mid'); 
+            }
+        }
+
+        // --- CORE FUNCTIONS ---
+        function loadFromParams(p) {
+            setVal('annualRevenue', p.get('rev'));
+            setVal('legacyMonthly', p.get('leg'));
+            setVal('wastedHours', p.get('hrs'));
+            setVal('hourlyRate', p.get('rate'));
+            setVal('errorRate', p.get('err'));
+            setVal('migrationCost', p.get('mig'));
+            setVal('newSaaSCost', p.get('new'));
+            setVal('migrationDuration', p.get('dur'));
+            setVal('growthRate', p.get('grow') || 10);
+            updateUI();
+            calculate();
+        }
+
+        function applyPreset(type) {
+            const d = presets[type];
+            setVal('annualRevenue', d.rev);
+            setVal('legacyMonthly', d.leg);
+            setVal('wastedHours', d.hours);
+            setVal('hourlyRate', d.rate);
+            setVal('errorRate', d.err);
+            setVal('migrationCost', d.mig);
+            setVal('newSaaSCost', d.new);
+            setVal('migrationDuration', d.dur);
+            setVal('growthRate', d.growth);
+            
+            // Update Active Button
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+type).classList.add('active');
+            
+            updateUI();
+            calculate();
+        }
+
+        function setVal(id, val) { document.getElementById(id).value = val; }
+        function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+        function updateRangeVal(id, val) { document.getElementById(id).innerText = val; }
+        
+        function updateUI() {
+            updateRangeVal('hoursDisplay', getVal('wastedHours'));
+            updateRangeVal('errorDisplay', getVal('errorRate') + '%');
+            updateRangeVal('durationDisplay', getVal('migrationDuration') + ' Mo');
+            updateRangeVal('growthDisplay', getVal('growthRate') + '%');
+        }
+
+        function formatMoney(n) { 
+            if(Math.abs(n) >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+            if(Math.abs(n) >= 1000) return '$' + (n/1000).toFixed(1) + 'k';
+            return '$' + Math.round(n);
+        }
+
+        // --- CALCULATION LOGIC ---
+        function calculate() {
+            const inputs = {
+                rev: getVal('annualRevenue'),
+                leg: getVal('legacyMonthly'),
+                hours: getVal('wastedHours'),
+                rate: getVal('hourlyRate'),
+                err: getVal('errorRate'),
+                mig: getVal('migrationCost'),
+                new: getVal('newSaaSCost'),
+                dur: getVal('migrationDuration'),
+                growth: getVal('growthRate') / 100
+            };
+
+            const months = 36;
+            let labels = [], legacyData = [], newData = [];
+            let legacyCum = 0, newCum = 0;
+
+            const baseLabor = (inputs.hours * 4.33) * inputs.rate;
+            const baseRisk = (inputs.rev * (inputs.err / 100)) / 12;
+            const baseBurn = inputs.leg + baseLabor + baseRisk;
+
+            for (let i = 0; i <= months; i++) {
+                labels.push('M' + i);
+                
+                // Legacy Logic: Exponential Growth
+                let growthFactor = Math.pow(1 + inputs.growth, i/12);
+                let monthBurn = baseBurn * growthFactor;
+                
+                if (i > 0) legacyCum += monthBurn;
+                legacyData.push(legacyCum);
+
+                // Migration Logic
+                let newCost = 0;
+                if (i === 1) newCost += inputs.mig; // Upfront fee
+
+                if (i > 0) {
+                    if (i <= inputs.dur) {
+                        // Overlap Phase: Pay both
+                        newCost += inputs.new + (inputs.leg * growthFactor);
+                    } else {
+                        // Optimized Phase
+                        newCost += inputs.new;
+                    }
+                    newCum += newCost;
+                }
+                newData.push(newCum);
+            }
+
+            const totalLegacy = legacyData[months];
+            const totalNew = newData[months];
+            const netSavings = totalLegacy - totalNew;
+            
+            let breakeven = 0;
+            for(let i=1; i < newData.length; i++) {
+                if(newData[i] < legacyData[i]) { breakeven = i; break; }
+            }
+
+            // Update DOM
+            document.getElementById('coiTotal').innerText = formatMoney(totalLegacy);
+            document.getElementById('netSavings').innerText = formatMoney(netSavings);
+            document.getElementById('roiMetric').innerText = breakeven > 0 ? breakeven + " Mo" : "> 36 Mo";
+            
+            const savingsEl = document.getElementById('netSavings');
+            savingsEl.style.color = netSavings > 0 ? 'var(--c-success)' : 'var(--c-error)';
+
+            updateChart(labels, legacyData, newData);
+            chartData = { inputs, totalLegacy, totalNew, netSavings, breakeven, legacyData, newData };
+        }
+
+        // --- CHART JS ---
+        function updateChart(labels, d1, d2) {
+            const ctx = document.getElementById('roiChart').getContext('2d');
+            if (myChart) myChart.destroy();
+            
+            const gradRed = ctx.createLinearGradient(0, 0, 0, 400);
+            gradRed.addColorStop(0, 'rgba(239, 68, 68, 0.1)');
+            gradRed.addColorStop(1, 'rgba(239, 68, 68, 0)');
+
+            const gradGreen = ctx.createLinearGradient(0, 0, 0, 400);
+            gradGreen.addColorStop(0, 'rgba(16, 185, 129, 0.1)');
+            gradGreen.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { 
+                            label: 'Legacy Cost (Inaction)', 
+                            data: d1, 
+                            borderColor: '#ef4444', 
+                            backgroundColor: gradRed, 
+                            fill: true, 
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 6
+                        },
+                        { 
+                            label: 'Migration Path', 
+                            data: d2, 
+                            borderColor: '#10b981', 
+                            backgroundColor: gradGreen, 
+                            fill: true, 
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: { 
+                            backgroundColor: '#0f172a',
+                            titleColor: '#94a3b8',
+                            bodyColor: '#ffffff',
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: { label: c => c.dataset.label + ': ' + new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0}).format(c.raw) } 
+                        } 
+                    },
+                    scales: { 
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { callback: v => '$' + v/1000 + 'k', color: '#64748b', font: {family: "'JetBrains Mono', monospace"} },
+                            grid: { color: '#f1f5f9' },
+                            border: { display: false }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { color: '#64748b', maxTicksLimit: 12, font: {family: "'Inter', sans-serif"} },
+                            border: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- PDF EXPORT ---
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFillColor(15, 23, 42); 
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(20);
+            doc.text("Strategic Migration Analysis", 15, 20);
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text("Generated: " + new Date().toLocaleDateString(), 15, 30);
+
+            // Summary
+            doc.setTextColor(40, 40, 40);
+            doc.setFontSize(12);
+            doc.text("Executive Summary (3-Year Projection)", 15, 55);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(80, 80, 80);
+            const verdict = chartData.netSavings > 0 
+                ? `Investment Strategy: Proceed. The migration is projected to save ${formatMoney(chartData.netSavings)} over 36 months, with a breakeven point at month ${chartData.breakeven}.`
+                : `Investment Strategy: Review. The migration cost exceeds projected 3-year savings.`;
+            doc.text(verdict, 15, 65);
+
+            // Table
+            doc.autoTable({
+                startY: 80,
+                head: [['Metric', 'Value']],
+                body: [
+                    ['Cost of Inaction (3-Yr)', formatMoney(chartData.totalLegacy)],
+                    ['Cost of Migration (3-Yr)', formatMoney(chartData.totalNew)],
+                    ['Net Savings', formatMoney(chartData.netSavings)],
+                    ['Breakeven Month', chartData.breakeven > 0 ? chartData.breakeven : "N/A"]
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: [15, 23, 42] }
+            });
+
+            // Chart
+            const canvas = document.getElementById('roiChart');
+            const chartImg = canvas.toDataURL('image/png', 1.0);
+            doc.addImage(chartImg, 'PNG', 15, 140, 180, 90);
+
+            doc.save("Migration_Strategy_Report.pdf");
+        }
+
+        function copyLink() {
+            if (navigator.clipboard) {
+                const p = new URLSearchParams({
+                    rev: getVal('annualRevenue'), leg: getVal('legacyMonthly'), hrs: getVal('wastedHours'), 
+                    rate: getVal('hourlyRate'), err: getVal('errorRate'), mig: getVal('migrationCost'), 
+                    new: getVal('newSaaSCost'), dur: getVal('migrationDuration'), grow: getVal('growthRate')
+                });
+                const url = `${window.location.origin}${window.location.pathname}?${p.toString()}`;
+                navigator.clipboard.writeText(url);
+                
+                const btn = document.getElementById('shareBtn');
+                const original = btn.innerHTML;
+                btn.innerHTML = `<span style="color:#10b981">Copied!</span>`;
+                setTimeout(() => btn.innerHTML = original, 2000);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
