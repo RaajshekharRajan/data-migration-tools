@@ -3,8 +3,7 @@ import Papa from 'papaparse';
 import { parse, isValid, format } from 'date-fns';
 import { 
   Undo, FileSpreadsheet, AlertTriangle, Download, Search, 
-  Trash2, CheckCircle, ArrowUpDown, ChevronLeft, ChevronRight, 
-  Replace, Scissors, RefreshCw, Eraser, X, Calendar, FileWarning, Bell, Layers
+  Trash2, CheckCircle, ArrowUpDown, ChevronLeft, ChevronRight, Scissors, RefreshCw, Eraser, X, Calendar, FileWarning, Bell, Layers
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer 
@@ -176,7 +175,7 @@ export default function DataProfilerApp() {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (results) => {
+      complete: (results: any) => {
         setColumns(results.meta.fields || []);
         setData(results.data as DataRow[]);
         setHistory([]);
