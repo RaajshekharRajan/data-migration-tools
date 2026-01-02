@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Vendor Evaluator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* --- ENTERPRISE THEME VARIABLES --- */
+        :root {
+            --c-bg: #f8fafc;          /* Slate 50 */
+            --c-surface: #ffffff;     /* White */
+            --c-text-main: #0f172a;   /* Slate 900 */
+            --c-text-muted: #64748b;  /* Slate 500 */
+            --c-border: #e2e8f0;      /* Slate 200 */
+            
+            /* Vendor Identities */
+            --col-a: #2563eb;         /* Blue 600 */
+            --col-a-bg: #eff6ff;      /* Blue 50 */
+            --col-b: #059669;         /* Emerald 600 */
+            --col-b-bg: #ecfdf5;      /* Emerald 50 */
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --radius: 12px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--c-bg);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: var(--font-ui);
+            color: var(--c-text-main);
+            margin: 0;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for sticky footer */
+        }
+
+        /* --- HEADER --- */
+        .app-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--c-border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.02em;
+        }
+        
+        .brand-icon {
+            background: linear-gradient(135deg, #0f172a, #334155);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        /* --- CONTROLS --- */
+        .controls-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: 1px solid var(--c-border);
+            background: white;
+            color: var(--c-text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover { background: #f1f5f9; color: var(--c-text-main); border-color: #cbd5e1; }
+        
+        .btn-primary {
+            background: var(--c-text-main);
+            color: white;
+            border-color: var(--c-text-main);
+        }
+        .btn-primary:hover { background: #1e293b; color: white; }
+
+        .btn-reset { color: #ef4444; border-color: #fee2e2; background: #fef2f2; }
+        .btn-reset:hover { background: #fee2e2; border-color: #fecaca; }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* --- VENDOR SETUP --- */
+        .vendor-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            align-items: end;
+        }
+
+        .vendor-col { display: flex; flex-direction: column; gap: 8px; }
+        
+        .vendor-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--c-text-muted);
+        }
+
+        .vendor-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid var(--c-border);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .vendor-input.a { border-color: #bfdbfe; color: var(--col-a); }
+        .vendor-input.a:focus { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        
+        .vendor-input.b { border-color: #a7f3d0; color: var(--col-b); text-align: right; }
+        .vendor-input.b:focus { box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+
+        .vs-badge {
+            background: #f1f5f9;
+            color: var(--c-text-muted);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        /* --- DASHBOARD --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 800px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .chart-wrapper {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            padding: 20px;
+            height: 350px;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .score-panel {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--c-border);
+        }
+        .score-row:last-child { border: none; padding-bottom: 0; }
+
+        .score-meta { display: flex; flex-direction: column; }
+        .score-name { font-size: 13px; font-weight: 600; color: var(--c-text-muted); text-transform: uppercase; margin-bottom: 4px; }
+        .grade-badge { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-block; width: fit-content; }
+
+        .score-value { font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+
+        /* --- MATRIX TABLES --- */
+        .matrix-section {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .matrix-header {
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--c-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .matrix-title { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        
+        .winner-tag {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            padding: 4px 8px; border-radius: 4px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .winner-tag.visible { opacity: 1; }
+        .winner-tag.a { background: var(--col-a-bg); color: var(--col-a); border: 1px solid #bfdbfe; }
+        .winner-tag.b { background: var(--col-b-bg); color: var(--col-b); border: 1px solid #a7f3d0; }
+        .winner-tag.tie { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+
+        table { width: 100%; border-collapse: collapse; }
+        
+        th {
+            text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase;
+            color: var(--c-text-muted); padding: 12px 24px; border-bottom: 1px solid var(--c-border);
+            background: #fff;
+        }
+        
+        td { padding: 16px 24px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+
+        .crit-title { font-weight: 600; font-size: 14px; color: var(--c-text-main); margin-bottom: 4px; }
+        .crit-desc { font-size: 12px; color: var(--c-text-muted); line-height: 1.4; }
+
+        /* Custom Range Inputs */
+        .slider-group { display: flex; align-items: center; gap: 12px; }
+        
+        .score-bubble {
+            width: 28px; height: 28px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-code); font-size: 13px; font-weight: 700;
+            background: #f1f5f9; color: var(--c-text-muted);
+        }
+        .score-bubble.active-a { background: var(--col-a); color: white; }
+        .score-bubble.active-b { background: var(--col-b); color: white; }
+
+        input[type=range] {
+            flex: 1; -webkit-appearance: none; background: transparent; cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%;
+            background: white; border: 2px solid #cbd5e1; margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px;
+        }
+        
+        /* A/B Colors for Sliders */
+        input.range-a::-webkit-slider-thumb { border-color: var(--col-a); }
+        input.range-a::-webkit-slider-runnable-track { background: linear-gradient(to right, var(--col-a) var(--track-fill, 0%), #e2e8f0 var(--track-fill, 0%)); }
+        
+        input.range-b::-webkit-slider-thumb { border-color: var(--col-b); }
+        input.range-b::-webkit-slider-runnable-track { background: linear-gradient(to right, var(--col-b) var(--track-fill, 0%), #e2e8f0 var(--track-fill, 0%)); }
+
+        /* --- STICKY FOOTER --- */
+        .sticky-score {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #0f172a; color: white;
+            padding: 12px 30px; border-radius: 50px;
+            display: flex; gap: 30px; align-items: center;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            z-index: 100;
+            font-family: var(--font-code); font-size: 14px;
+        }
+        .footer-val { font-weight: 700; font-size: 16px; }
+        .footer-sep { width: 1px; height: 16px; background: #334155; }
+
+        /* --- PRINT --- */
+        @media print {
+            body { background: white; padding: 0; }
+            .app-header, .sticky-score, .controls-wrapper { display: none !important; }
+            .container { max-width: none; margin: 0; padding: 0; }
+            .vendor-card, .chart-wrapper, .score-panel, .matrix-section { box-shadow: none; border: 1px solid #000; break-inside: avoid; }
+            input[type=range] { display: none; }
+            .score-bubble { border: 1px solid #000; color: black !important; background: white !important; }
+            .chart-wrapper { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon">VS</div>
+            <div>Migration Vendor Evaluator</div>
+        </div>
+        <div class="controls-wrapper">
+            <button class="btn" onclick="loadPreset('automated')">🤖 Automated</button>
+            <button class="btn" onclick="loadPreset('it_giants')">🏢 IT Giants</button>
+            <button class="btn" onclick="loadPreset('clonepartner')" style="background:#ecfdf5; color:#065f46; border-color:#6ee7b7;">🚀 ClonePartner</button>
+            <button class="btn btn-primary" onclick="window.print()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                PDF Report
+            </button>
+            <button class="btn btn-reset" onclick="clearAll()">Reset</button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div class="vendor-card">
+            <div class="vendor-col">
+                <label class="vendor-label">Vendor A</label>
+                <input type="text" id="name-a" class="vendor-input a" value="Automated Tool" oninput="saveData(); calc()">
+            </div>
+            <div class="vs-badge">VS</div>
+            <div class="vendor-col" style="align-items: flex-end;">
+                <label class="vendor-label">Vendor B</label>
+                <input type="text" id="name-b" class="vendor-input b" value="ClonePartner" oninput="saveData(); calc()">
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-wrapper">
+                <canvas id="radarChart"></canvas>
+            </div>
+            
+            <div class="score-panel">
+                <div class="score-row">
+                    <div class="score-meta">
+                        <div class="score-name" id="lbl-a">Vendor A</div>
+                        <div class="grade-badge" id="grade-a" style="background:#e2e8f0; color:#64748b">Grade -</div>
+                    </div>
+                    <div class="score-value" style="color:var(--col-a)" id="total-a">0</div>
+                </div>
+                
+                <div class="score-row">
+                    <div class="score-meta">
+                        <div class="score-name" id="lbl-b">Vendor B</div>
+                        <div class="grade-badge" id="grade-b" style="background:#e2e8f0; color:#64748b">Grade -</div>
+                    </div>
+                    <div class="score-value" style="color:var(--col-b)" id="total-b">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="matrix-root"></div>
+
+    </div>
+
+    <div class="sticky-score">
+        <span style="color:#94a3b8">SCORECARD</span>
+        <div class="footer-sep"></div>
+        <span style="color:#60a5fa">A: <span class="footer-val" id="foot-a">0</span></span>
+        <span style="color:#34d399">B: <span class="footer-val" id="foot-b">0</span></span>
+    </div>
+
+    <script>
+        // --- CONFIG DATA ---
+        // Scores are based on industry standards for "Automated Tools" vs "Consultants"
+        const categories = [
+            { id: 'data', name: 'Data Fidelity', icon: '💾', items: [
+                { t: "Custom Scripting", d: "Ability to handle unique edge cases", auto: 0, consult: 7 },
+                { t: "Custom Fields", d: "Preserve non-standard data fields", auto: 3, consult: 10 },
+                { t: "Attachments", d: "Handling large files & docs", auto: 5, consult: 10 },
+                { t: "Inline Images", d: "Screenshots in ticket threads", auto: 2, consult: 5 },
+                { t: "Threading", d: "Conversation reply structure", auto: 5, consult: 10 },
+                { t: "Macros/Rules", d: "Migration of automation logic", auto: 0, consult: 5 },
+                { t: "KB Links", d: "Remapping internal links", auto: 0, consult: 5 },
+                { t: "History/Logs", d: "Audit logs & timestamps", auto: 0, consult: 6 },
+                { t: "Multi-Language", d: "Support for varying locales", auto: 5, consult: 10 }
+            ]},
+            { id: 'tech', name: 'Technical Execution', icon: '⚙️', items: [
+                { t: "Continuous Sync", d: "Keep systems live during migration", auto: 0, consult: 0 },
+                { t: "Downtime Control", d: "Delta sync capability", auto: 3, consult: 5 },
+                { t: "API Limits", d: "Rate limit handling strategy", auto: 4, consult: 10 },
+                { t: "Error Handling", d: "Auto-retries on failure", auto: 2, consult: 6 },
+                { t: "Validation", d: "A/B count reports provided", auto: 3, consult: 7 },
+                { t: "Sandboxes", d: "Unlimited testing runs", auto: 2, consult: 5 },
+                { t: "Rollback", d: "Ease of undoing errors", auto: 0, consult: 4 }
+            ]},
+            { id: 'service', name: 'Service & Support', icon: '🤝', items: [
+                { t: "Dedicated Engineer", d: "Direct human contact", auto: 0, consult: 8 }, 
+                { t: "Scoping Call", d: "Pre-migration planning session", auto: 0, consult: 10 },
+                { t: "Project Mgmt", d: "Vendor drives the timeline", auto: 0, consult: 8 },
+                { t: "Real-time Comms", d: "Slack/Teams shared channel", auto: 0, consult: 8 }, 
+                { t: "Weekend Cutover", d: "Off-hours work availability", auto: 0, consult: 6 },
+                { t: "Warranty", d: "Post-migration support period", auto: 0, consult: 8 }
+            ]},
+            { id: 'security', name: 'Security & Compliance', icon: '🔒', items: [
+                { t: "SOC 2 / ISO", d: "Verified security credentials", auto: 5, consult: 10 },
+                { t: "Encryption", d: "In transit & at rest", auto: 10, consult: 10 },
+                { t: "Deletion", d: "Strict data wiping policy", auto: 5, consult: 10 },
+                { t: "GDPR", d: "DPA policies in place", auto: 8, consult: 10 }
+            ]},
+            { id: 'cost', name: 'Value & Speed', icon: '💰', items: [
+                { t: "Total Cost", d: "Value for money (10=Best)", auto: 5, consult: 2 },
+                { t: "Cost Certainty", d: "Fixed Price vs T&M", auto: 5, consult: 7 }, 
+                { t: "Hidden Fees", d: "No overage charges (10=None)", auto: 3, consult: 4 },
+                { t: "Effort", d: "Internal team effort (10=Low Effort)", auto: 3, consult: 6 }, 
+                { t: "Velocity", d: "Speed to completion (10=Fast)", auto: 10, consult: 3 }
+            ]}
+        ];
+
+        let chartInstance;
+
+        // --- INIT ---
+        function init() {
+            renderMatrix();
+            initChart();
+            loadFromStorage();
+        }
+
+        // --- RENDER UI ---
+        function renderMatrix() {
+            const root = document.getElementById('matrix-root');
+            let html = '';
+
+            categories.forEach((cat, idx) => {
+                html += `
+                <div class="matrix-section">
+                    <div class="matrix-header">
+                        <div class="matrix-title"><span>${cat.icon}</span> ${cat.name}</div>
+                        <div class="winner-tag" id="badge-${idx}">Tie</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:40%">Criteria</th>
+                                <th style="width:30%; color:var(--col-a)">Vendor A</th>
+                                <th style="width:30%; color:var(--col-b)">Vendor B</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                cat.items.forEach((item, i) => {
+                    html += `
+                    <tr>
+                        <td>
+                            <div class="crit-title">${item.t}</div>
+                            <div class="crit-desc">${item.d}</div>
+                        </td>
+                        <td>
+                            <div class="slider-group">
+                                <div class="score-bubble" id="bubble-a-${idx}-${i}">0</div>
+                                <input type="range" min="0" max="10" value="0" class="inp-a-${idx} range-a" oninput="updateBubble(this, 'a'); calc()">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slider-group">
+                                <div class="score-bubble" id="bubble-b-${idx}-${i}">0</div>
+                                <input type="range" min="0" max="10" value="0" class="inp-b-${idx} range-b" oninput="updateBubble(this, 'b'); calc()">
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div>`;
+            });
+            root.innerHTML = html;
+        }
+
+        function updateBubble(input, type) {
+            const row = input.closest('td');
+            const bubble = row.querySelector('.score-bubble');
+            bubble.innerText = input.value;
+            
+            // Visual fill logic for range track
+            input.style.setProperty('--track-fill', `${input.value * 10}%`);
+            
+            // Highlight bubble if value > 0
+            if(input.value > 0) bubble.classList.add(`active-${type}`);
+            else bubble.classList.remove(`active-${type}`);
+        }
+
+        // --- CALCULATION ---
+        function calc() {
+            let totalA = 0, totalB = 0;
+            let maxScore = 0;
+            let dataA = [], dataB = [];
+
+            categories.forEach((cat, idx) => {
+                let catA = 0, catB = 0;
+                const inputsA = document.querySelectorAll(`.inp-a-${idx}`);
+                const inputsB = document.querySelectorAll(`.inp-b-${idx}`);
+
+                inputsA.forEach(inp => catA += parseInt(inp.value || 0));
+                inputsB.forEach(inp => catB += parseInt(inp.value || 0));
+                
+                const catMax = inputsA.length * 10;
+                maxScore += catMax;
+
+                // Update Badge
+                const badge = document.getElementById(`badge-${idx}`);
+                badge.classList.add('visible');
+                if(catA > catB) { badge.innerText = "A Wins"; badge.className = "winner-tag visible a"; }
+                else if(catB > catA) { badge.innerText = "B Wins"; badge.className = "winner-tag visible b"; }
+                else { badge.innerText = "Tie"; badge.className = "winner-tag visible tie"; }
+
+                totalA += catA;
+                totalB += catB;
+                
+                // Chart Data (Normalized to 100)
+                dataA.push(catMax ? (catA/catMax)*100 : 0);
+                dataB.push(catMax ? (catB/catMax)*100 : 0);
+            });
+
+            // Update DOM
+            updateStat('total-a', totalA);
+            updateStat('total-b', totalB);
+            updateStat('foot-a', totalA);
+            updateStat('foot-b', totalB);
+
+            // Grades
+            renderGrade('grade-a', totalA, maxScore, '#bfdbfe', '#1e3a8a');
+            renderGrade('grade-b', totalB, maxScore, '#a7f3d0', '#064e3b');
+
+            // Names
+            const nameA = document.getElementById('name-a').value;
+            const nameB = document.getElementById('name-b').value;
+            document.getElementById('lbl-a').innerText = nameA;
+            document.getElementById('lbl-b').innerText = nameB;
+
+            updateChart(dataA, dataB);
+            saveData();
+        }
+
+        function updateStat(id, val) { document.getElementById(id).innerText = val; }
+
+        function renderGrade(id, score, max, bg, color) {
+            const el = document.getElementById(id);
+            if(!max) { el.innerText = "-"; return; }
+            const p = score/max;
+            let txt = "D";
+            if(p > 0.9) txt = "A+ Excellent";
+            else if(p > 0.8) txt = "A Very Good";
+            else if(p > 0.7) txt = "B Good";
+            else if(p > 0.6) txt = "C Average";
+            
+            el.innerText = txt;
+            el.style.backgroundColor = p > 0.6 ? bg : '#fecaca';
+            el.style.color = p > 0.6 ? color : '#991b1b';
+        }
+
+        // --- CHART ---
+        function initChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: categories.map(c => c.name),
+                    datasets: [
+                        { label: 'Vendor A', data: [], backgroundColor: 'rgba(37, 99, 235, 0.2)', borderColor: '#2563eb', borderWidth: 2, pointBackgroundColor: '#2563eb' },
+                        { label: 'Vendor B', data: [], backgroundColor: 'rgba(5, 150, 105, 0.2)', borderColor: '#059669', borderWidth: 2, pointBackgroundColor: '#059669' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true, max: 100,
+                            ticks: { display: false },
+                            pointLabels: { font: { size: 11, weight: '700', family: "'Inter', sans-serif" }, color: '#64748b' },
+                            grid: { color: '#e2e8f0' }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function updateChart(dA, dB) {
+            chartInstance.data.datasets[0].data = dA;
+            chartInstance.data.datasets[1].data = dB;
+            chartInstance.update();
+        }
+
+        // --- PRESETS & STORAGE ---
+        function loadPreset(type) {
+            const isCP = type === 'clonepartner';
+            if(isCP) {
+                document.getElementById('name-b').value = "ClonePartner";
+                setVals('b', 10);
+            } else {
+                const isAuto = type === 'automated';
+                document.getElementById('name-a').value = isAuto ? "Automated Tools" : "IT Giants";
+                categories.forEach((cat, idx) => {
+                    cat.items.forEach((item, i) => {
+                        const v = isAuto ? item.auto : item.consult;
+                        const inp = document.getElementsByClassName(`inp-a-${idx}`)[i];
+                        if(inp) { inp.value = v; updateBubble(inp, 'a'); }
+                    });
+                });
+            }
+            calc();
+        }
+
+        function setVals(vendor, val) {
+            categories.forEach((cat, idx) => {
+                cat.items.forEach((_, i) => {
+                    const inp = document.getElementsByClassName(`inp-${vendor}-${idx}`)[i];
+                    if(inp) { inp.value = val; updateBubble(inp, vendor); }
+                });
+            });
+        }
+
+        function saveData() {
+            const d = {
+                nA: document.getElementById('name-a').value,
+                nB: document.getElementById('name-b').value,
+                sA: Array.from(document.querySelectorAll('.range-a')).map(i=>i.value),
+                sB: Array.from(document.querySelectorAll('.range-b')).map(i=>i.value)
+            };
+            localStorage.setItem('mve_data_v6', JSON.stringify(d));
+        }
+
+        function loadFromStorage() {
+            const d = JSON.parse(localStorage.getItem('mve_data_v6'));
+            if(!d) return;
+            document.getElementById('name-a').value = d.nA;
+            document.getElementById('name-b').value = d.nB;
+            if(d.sA) d.sA.forEach((v,i) => { 
+                const el = document.querySelectorAll('.range-a')[i];
+                if(el) { el.value = v; updateBubble(el, 'a'); }
+            });
+            if(d.sB) d.sB.forEach((v,i) => { 
+                const el = document.querySelectorAll('.range-b')[i];
+                if(el) { el.value = v; updateBubble(el, 'b'); }
+            });
+            calc();
+        }
+
+        function clearAll() {
+            localStorage.removeItem('mve_data_v6');
+            location.reload();
+        }
+
+        // Run
+        setTimeout(init, 100);
+    </script>
+</body>
+</html>
