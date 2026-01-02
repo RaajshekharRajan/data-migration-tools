@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Data Converter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ENTERPRISE DESIGN SYSTEM --- */
+        :root {
+            --c-bg: #f8fafc;          /* Slate 50 */
+            --c-surface: #ffffff;     /* White */
+            --c-text-main: #0f172a;   /* Slate 900 */
+            --c-text-muted: #64748b;  /* Slate 500 */
+            --c-border: #e2e8f0;      /* Slate 200 */
+            --c-primary: #0f172a;     /* Slate 900 */
+            --c-primary-hover: #1e293b; 
+            --c-accent: #3b82f6;      /* Blue 500 */
+            --c-success: #10b981;     /* Emerald 500 */
+            --c-error: #ef4444;       /* Red 500 */
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--c-bg);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: var(--font-ui);
+            color: var(--c-text-main);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: calc(100vh - 80px);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* --- TITLE AREA --- */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--c-surface);
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--c-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .title-group h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0f172a, #334155);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-code);
+            font-size: 14px;
+        }
+
+        .global-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* --- MAIN GRID --- */
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            gap: 16px;
+            flex: 1;
+            min-height: 0; /* Important for scroll */
+        }
+
+        @media (max-width: 900px) {
+            .container { height: auto; }
+            .converter-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr auto 1fr;
+                height: 800px;
+            }
+        }
+
+        /* --- EDITOR CARDS --- */
+        .editor-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .editor-card:focus-within {
+            border-color: #94a3b8;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--c-border);
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--c-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .badge.xml { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
+        .badge.json { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+
+        .validation-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            transition: background 0.3s;
+        }
+        .validation-dot.valid { background: var(--c-success); box-shadow: 0 0 8px var(--c-success); }
+        .validation-dot.invalid { background: var(--c-error); }
+
+        /* Icon Buttons */
+        .icon-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            color: var(--c-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .icon-btn:hover {
+            background: white;
+            border-color: var(--c-border);
+            color: var(--c-text-main);
+            box-shadow: var(--shadow-sm);
+        }
+        .icon-btn svg { width: 14px; height: 14px; }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--c-border);
+            margin: 0 4px;
+        }
+
+        /* Textarea */
+        .editor-wrapper {
+            flex: 1;
+            position: relative;
+            background: var(--c-surface);
+        }
+        
+        textarea.code-editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 16px;
+            font-family: var(--font-code);
+            font-size: 13px;
+            line-height: 1.6;
+            resize: none;
+            color: var(--c-text-main);
+            outline: none;
+            background: transparent;
+        }
+        
+        textarea.code-editor::placeholder { color: #cbd5e1; }
+
+        /* Footer */
+        .editor-footer {
+            padding: 6px 16px;
+            background: #f8fafc;
+            border-top: 1px solid var(--c-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--c-text-muted);
+            font-family: var(--font-code);
+        }
+
+        /* --- CENTRAL CONTROLS --- */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .convert-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: none;
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            color: var(--c-text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .convert-btn:hover {
+            background: var(--c-primary);
+            color: white;
+            border-color: var(--c-primary);
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .download-trigger {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--c-surface);
+            border: 2px dashed var(--c-border);
+            color: var(--c-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: not-allowed;
+            transition: all 0.2s;
+        }
+
+        .download-trigger.active {
+            border-color: var(--c-success);
+            color: var(--c-success);
+            background: #ecfdf5;
+            cursor: pointer;
+        }
+        .download-trigger.active:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #fff;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            border: 1px solid var(--c-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999;
+        }
+        #toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #toast.error { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+        #toast.success { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+
+        input[type="file"] { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="toast"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="title-group">
+                <div class="title-icon">&lt;/&gt;</div>
+                <h1>XML ⇄ JSON Converter</h1>
+            </div>
+            <div class="global-actions">
+                <button class="icon-btn" onclick="loadSample()" style="width:auto; padding:0 12px; font-weight:500; font-family:var(--font-ui); font-size:13px;">
+                    Load Sample
+                </button>
+            </div>
+        </div>
+
+        <div class="converter-grid">
+            
+            <div class="editor-card">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="label">XML <div class="validation-dot" id="xmlDot" title="Validation Status"></div></div>
+                    </div>
+                    <div class="toolbar-left">
+                        <button class="icon-btn" onclick="formatXML()" title="Prettify / Format">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H3"/><path d="M21 6H3"/><path d="M21 14H3"/><path d="M21 18H3"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="minifyXML()" title="Minify">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6"/><path d="M4 10h6"/><path d="M14 10h6"/><path d="M14 14h6"/></svg>
+                        </button>
+                        <div class="toolbar-divider"></div>
+                        <label class="icon-btn" title="Upload File">
+                            <input type="file" id="xmlFile" accept=".xml,.txt">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        </label>
+                        <button class="icon-btn" onclick="copyContent('xmlInput', this)" title="Copy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="clearBox('xmlInput')" title="Clear">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="editor-wrapper">
+                    <textarea id="xmlInput" class="code-editor" placeholder="" spellcheck="false"></textarea>
+                </div>
+                <div class="editor-footer">
+                    <span id="xmlLines">0 lines</span>
+                    <span id="xmlChars">0 chars</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="convert-btn" id="toJson" title="Convert XML to JSON">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+                
+                <button class="convert-btn" id="toXml" title="Convert JSON to XML" style="transform: rotate(180deg);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+
+                <div style="height: 20px"></div>
+
+                <button class="download-trigger" id="downloadBtn" title="Download Result">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </button>
+            </div>
+
+            <div class="editor-card">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="label">JSON <div class="validation-dot" id="jsonDot" title="Validation Status"></div></div>
+                    </div>
+                    <div class="toolbar-left">
+                        <button class="icon-btn" onclick="formatJSON()" title="Prettify / Format">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H3"/><path d="M21 6H3"/><path d="M21 14H3"/><path d="M21 18H3"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="minifyJSON()" title="Minify">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6"/><path d="M4 10h6"/><path d="M14 10h6"/><path d="M14 14h6"/></svg>
+                        </button>
+                        <div class="toolbar-divider"></div>
+                        <label class="icon-btn" title="Upload File">
+                            <input type="file" id="jsonFile" accept=".json,.txt">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        </label>
+                        <button class="icon-btn" onclick="copyContent('jsonInput', this)" title="Copy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="clearBox('jsonInput')" title="Clear">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="editor-wrapper">
+                    <textarea id="jsonInput" class="code-editor" placeholder="{ ... }" spellcheck="false"></textarea>
+                </div>
+                <div class="editor-footer">
+                    <span id="jsonLines">0 lines</span>
+                    <span id="jsonChars">0 chars</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- 1. XML CONVERTER ENGINE ---
+        const XmlEngine = {
+            toJson: function(xmlStr) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+                const error = xmlDoc.querySelector("parsererror");
+                if (error) throw new Error(error.innerText.split(':')[0] || "Invalid XML");
+                
+                const root = xmlDoc.documentElement;
+                const content = this.nodeToJson(root);
+                const result = {};
+                result[root.nodeName] = content;
+                return result;
+            },
+            nodeToJson: function(node) {
+                if (node.nodeType !== 1) return "";
+                
+                const obj = {};
+                
+                // Attributes
+                if (node.attributes.length > 0) {
+                    for (let i = 0; i < node.attributes.length; i++) {
+                        const attr = node.attributes.item(i);
+                        obj["@" + attr.nodeName] = attr.nodeValue;
+                    }
+                }
+
+                // Children
+                if (node.hasChildNodes()) {
+                    let hasElements = false;
+                    for (let i = 0; i < node.childNodes.length; i++) {
+                        const child = node.childNodes.item(i);
+                        if (child.nodeType === 1) { // Element
+                            hasElements = true;
+                            const childJson = this.nodeToJson(child);
+                            const name = child.nodeName;
+                            
+                            if (obj[name] === undefined) {
+                                obj[name] = childJson;
+                            } else {
+                                if (!Array.isArray(obj[name])) obj[name] = [obj[name]];
+                                obj[name].push(childJson);
+                            }
+                        }
+                    }
+                    
+                    // Text Content
+                    if (!hasElements) {
+                        const txt = node.textContent.trim();
+                        if (Object.keys(obj).length === 0) return txt;
+                        if (txt) obj["#text"] = txt;
+                    }
+                }
+                return obj;
+            },
+            toXml: function(jsonObj) {
+                let xml = '';
+                const keys = Object.keys(jsonObj);
+                const needsRoot = keys.length > 1 || (keys.length === 1 && Array.isArray(jsonObj[keys[0]]));
+                
+                if (needsRoot) xml += '<root>';
+                xml += this.jsonToXmlRec(jsonObj);
+                if (needsRoot) xml += '</root>';
+                
+                return this.format(xml);
+            },
+            jsonToXmlRec: function(obj) {
+                let xml = '';
+                for (let key in obj) {
+                    if (!obj.hasOwnProperty(key)) continue;
+                    if (key.startsWith('@') || key === "#text") continue;
+                    
+                    const value = obj[key];
+                    if (Array.isArray(value)) {
+                        value.forEach(item => xml += this.buildTag(key, item));
+                    } else {
+                        xml += this.buildTag(key, value);
+                    }
+                }
+                return xml;
+            },
+            buildTag: function(name, value) {
+                let attrs = '';
+                let content = '';
+                
+                if (typeof value === 'object' && value !== null) {
+                    for (let k in value) {
+                        if (k.startsWith('@')) attrs += ` ${k.substring(1)}="${value[k]}"`;
+                    }
+                    if (value["#text"]) content = value["#text"];
+                    else content = this.jsonToXmlRec(value);
+                } else {
+                    content = value;
+                }
+                
+                return `<${name}${attrs}>${content}</${name}>`;
+            },
+            format: function(xml) {
+                let formatted = '', pad = 0;
+                xml.replace(/(>)(<)(\/*)/g, '$1\r\n$2$3').split('\r\n').forEach(node => {
+                    let indent = 0;
+                    if (node.match(/.+<\/\w[^>]*>$/)) indent = 0;
+                    else if (node.match(/^<\/\w/)) { if (pad !== 0) pad -= 1; }
+                    else if (node.match(/^<\w[^>]*[^\/]>.*$/)) indent = 1;
+                    
+                    let padding = '';
+                    for (let i = 0; i < pad; i++) padding += '  ';
+                    formatted += padding + node + '\r\n';
+                    pad += indent;
+                });
+                return formatted.trim();
+            }
+        };
+
+        // --- 2. UI CONTROLLER ---
+        let downloadType = null;
+        const els = {
+            xml: document.getElementById('xmlInput'),
+            json: document.getElementById('jsonInput'),
+            toast: document.getElementById('toast'),
+            btnDownload: document.getElementById('downloadBtn'),
+            xmlDot: document.getElementById('xmlDot'),
+            jsonDot: document.getElementById('jsonDot')
+        };
+
+        // Utilities
+        function showToast(msg, type = 'error') {
+            els.toast.textContent = (type === 'error' ? '⚠️ ' : '✅ ') + msg;
+            els.toast.className = `visible ${type}`;
+            setTimeout(() => els.toast.className = '', 3000);
+        }
+
+        window.updateStats = () => {
+            ['xml', 'json'].forEach(type => {
+                const val = els[type].value;
+                document.getElementById(`${type}Chars`).innerText = val.length.toLocaleString() + " chars";
+                document.getElementById(`${type}Lines`).innerText = (val.match(/\n/g) || []).length + 1 + " lines";
+            });
+        };
+
+        window.clearBox = (id) => {
+            document.getElementById(id).value = '';
+            window.updateStats();
+            validateInput(id === 'xmlInput' ? 'xml' : 'json');
+        };
+
+        window.copyContent = (id, btn) => {
+            const el = document.getElementById(id);
+            if(!el.value) return;
+            el.select();
+            navigator.clipboard.writeText(el.value);
+            const original = btn.innerHTML;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            setTimeout(() => btn.innerHTML = original, 1500);
+        };
+
+        // --- FEATURES ---
+        window.loadSample = () => {
+            els.xml.value = `<catalog>\n  <book id="bk101">\n    <title>Enterprise Design</title>\n    <price>49.99</price>\n    <stock>In Stock</stock>\n  </book>\n</catalog>`;
+            els.json.value = '';
+            window.updateStats();
+            validateInput('xml');
+        };
+
+        window.formatXML = () => {
+            if(!els.xml.value) return;
+            try {
+                els.xml.value = XmlEngine.format(els.xml.value.replace(/>\s*</g, '><')); // Flatten then format
+                showToast("XML Formatted", "success");
+                window.updateStats();
+            } catch(e) { showToast("Invalid XML"); }
+        };
+
+        window.minifyXML = () => {
+            if(!els.xml.value) return;
+            els.xml.value = els.xml.value.replace(/>\s*</g, '><').trim();
+            window.updateStats();
+        };
+
+        window.formatJSON = () => {
+            if(!els.json.value) return;
+            try {
+                els.json.value = JSON.stringify(JSON.parse(els.json.value), null, 2);
+                showToast("JSON Formatted", "success");
+                window.updateStats();
+                validateInput('json');
+            } catch(e) { showToast("Invalid JSON"); }
+        };
+
+        window.minifyJSON = () => {
+            if(!els.json.value) return;
+            try {
+                els.json.value = JSON.stringify(JSON.parse(els.json.value));
+                window.updateStats();
+            } catch(e) { showToast("Invalid JSON"); }
+        };
+
+        // --- CONVERSION ---
+        document.getElementById('toJson').addEventListener('click', () => {
+            const val = els.xml.value.trim();
+            if(!val) return showToast("Enter XML first");
+            try {
+                const res = XmlEngine.toJson(val);
+                els.json.value = JSON.stringify(res, null, 2);
+                window.updateStats();
+                downloadType = 'json';
+                els.btnDownload.classList.add('active');
+                validateInput('json');
+                validateInput('xml');
+            } catch(e) { showToast(e.message); }
+        });
+
+        document.getElementById('toXml').addEventListener('click', () => {
+            const val = els.json.value.trim();
+            if(!val) return showToast("Enter JSON first");
+            try {
+                const res = XmlEngine.toXml(JSON.parse(val));
+                els.xml.value = res;
+                window.updateStats();
+                downloadType = 'xml';
+                els.btnDownload.classList.add('active');
+                validateInput('json');
+                validateInput('xml');
+            } catch(e) { showToast("Invalid JSON structure"); }
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if(!downloadType) return;
+            const content = downloadType === 'json' ? els.json.value : els.xml.value;
+            const mime = downloadType === 'json' ? 'application/json' : 'text/xml';
+            const blob = new Blob([content], { type: mime });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `converted.${downloadType}`;
+            link.click();
+        });
+
+        // --- VALIDATION & FILES ---
+        function validateInput(type) {
+            const val = els[type].value.trim();
+            const dot = els[type + 'Dot'];
+            if(!val) { dot.className = 'validation-dot'; return; }
+            
+            let valid = false;
+            try {
+                if(type === 'json') JSON.parse(val);
+                else new DOMParser().parseFromString(val, "text/xml").querySelector("parsererror") ? valid = false : valid = true;
+                if(type === 'json') valid = true; 
+            } catch(e) { valid = false; }
+
+            dot.className = `validation-dot ${valid ? 'valid' : 'invalid'}`;
+        }
+
+        ['xml', 'json'].forEach(type => {
+            const fileInput = document.getElementById(`${type}File`);
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if(!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    els[type].value = ev.target.result;
+                    window.updateStats();
+                    validateInput(type);
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            });
+            
+            els[type].addEventListener('input', () => {
+                window.updateStats();
+                validateInput(type);
+                els.btnDownload.classList.remove('active');
+                downloadType = null;
+            });
+        });
+
+    </script>
+</body>
+</html>
