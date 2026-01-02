@@ -1,0 +1,1635 @@
+[
+  {
+    "id": "zendesk_suite_team",
+    "brand_name": "Zendesk",
+    "plan_name": "Suite Team",
+    "brand_color": "#03363D",
+    "official_url": "https://www.zendesk.com/pricing/",
+    "pricing": { "cost_per_agent": 55, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "Voice (Talk)" },
+      "chat": { "included": true, "display_text": "Messaging" },
+      "sms": { "included": true },
+      "whatsapp": { "included": false },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "tier": "basic" },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": true, "display_text": "Standard Bot" },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "tier": "standard" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": false }
+    },
+    "security": {
+      "sso": { "included": true, "display_text": "Single Sign-On" },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true, "limit": "Standard Rate" },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true, "display_text": "8x5 Support" },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "zendesk_suite_growth",
+    "brand_name": "Zendesk",
+    "plan_name": "Suite Growth",
+    "brand_color": "#03363D",
+    "official_url": "https://www.zendesk.com/pricing/",
+    "pricing": { "cost_per_agent": 89, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": true },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": true },
+      "resolution_bot": { "included": true },
+      "agent_copilot": { "included": true }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true, "limit": "5 Brands" },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "zendesk_suite_pro",
+    "brand_name": "Zendesk",
+    "plan_name": "Suite Professional",
+    "brand_color": "#03363D",
+    "official_url": "https://www.zendesk.com/pricing/",
+    "pricing": { "cost_per_agent": 115, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": true },
+      "live_translation": { "included": true },
+      "auto_triage": { "included": true },
+      "resolution_bot": { "included": true },
+      "agent_copilot": { "included": true }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": true },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true, "limit": "50 Brands" },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": true, "tier": "advanced" },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": true },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": true },
+      "sandbox": { "included": false },
+      "api_access": { "included": true, "limit": "High Rate" },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true, "display_text": "24/7 Support" },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "freshdesk_growth",
+    "brand_name": "Freshdesk",
+    "plan_name": "Growth",
+    "brand_color": "#0F1C2E",
+    "official_url": "https://freshdesk.com/pricing",
+    "pricing": { "cost_per_agent": 15, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": false },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": true, "display_text": "FB & Insta" },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "tier": "basic" },
+      "sla_management": { "included": true },
+      "macros": { "included": true, "display_text": "Canned Responses" },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true, "display_text": "Curated Reports" },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": false }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "freshdesk_pro",
+    "brand_name": "Freshdesk",
+    "plan_name": "Pro",
+    "brand_color": "#0F1C2E",
+    "official_url": "https://freshdesk.com/pricing",
+    "pricing": { "cost_per_agent": 49, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": false },
+      "sms": { "included": false },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true, "display_text": "Multilingual" }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "tier": "advanced" },
+      "sla_management": { "included": true, "display_text": "Multiple SLAs" },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true, "limit": "5 Brands" },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": true },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": true },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "freshdesk_omni_growth",
+    "brand_name": "Freshdesk Omni",
+    "plan_name": "Growth Omni",
+    "brand_color": "#0F1C2E",
+    "official_url": "https://www.freshworks.com/freshdesk/omni/pricing",
+    "pricing": { "cost_per_agent": 29, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "2000 Incoming Mins" },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": true, "display_text": "Freddy Bot (500 free)" },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": false }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "hubspot_service_starter",
+    "brand_name": "HubSpot",
+    "plan_name": "Service Starter",
+    "brand_color": "#FF5C35",
+    "official_url": "https://www.hubspot.com/pricing/service",
+    "pricing": { "cost_per_agent": 15, "currency": "USD", "period": "annual", "model": "per_seat" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "Calling SDK" },
+      "chat": { "included": true },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": true, "display_text": "FB Messenger" },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "display_text": "ChatSpot" },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "tier": "basic", "display_text": "Simple Automation" },
+      "sla_management": { "included": false },
+      "macros": { "included": true, "display_text": "Snippets" },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": false }
+    },
+    "self_service": {
+      "knowledge_base": { "included": false },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "hubspot_service_pro",
+    "brand_name": "HubSpot",
+    "plan_name": "Service Professional",
+    "brand_color": "#FF5C35",
+    "official_url": "https://www.hubspot.com/pricing/service",
+    "pricing": { "cost_per_agent": 90, "currency": "USD", "period": "annual", "model": "per_seat" },
+    "constraints": { "ticket_limit": "Unlimited", "min_seats": 5 },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true },
+      "chat": { "included": true },
+      "sms": { "included": true, "display_text": "Via App" },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "display_text": "Breeze AI" },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": true, "display_text": "Conversation Intel" },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": true },
+      "agent_copilot": { "included": true }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "tier": "enterprise" },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "zoho_desk_standard",
+    "brand_name": "Zoho Desk",
+    "plan_name": "Standard",
+    "brand_color": "#009384",
+    "official_url": "https://www.zoho.com/desk/pricing.html",
+    "pricing": { "cost_per_agent": 14, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": false },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": true, "display_text": "Twitter & FB" },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Workflows" },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true, "tier": "basic" },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "zoho_desk_professional",
+    "brand_name": "Zoho Desk",
+    "plan_name": "Professional",
+    "brand_color": "#009384",
+    "official_url": "https://www.zoho.com/desk/pricing.html",
+    "pricing": { "cost_per_agent": 23, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "Telephony" },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": false },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": true },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "zoho_desk_enterprise",
+    "brand_name": "Zoho Desk",
+    "plan_name": "Enterprise",
+    "brand_color": "#009384",
+    "official_url": "https://www.zoho.com/desk/pricing.html",
+    "pricing": { "cost_per_agent": 40, "currency": "USD", "period": "annual", "model": "per_agent" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "display_text": "Zia" },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": true },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": true },
+      "resolution_bot": { "included": true },
+      "agent_copilot": { "included": true }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Blueprints" },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": true },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true, "display_text": "50 Brands" },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": true },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": true },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": true },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "salesforce_starter",
+    "brand_name": "Salesforce",
+    "plan_name": "Starter Suite",
+    "brand_color": "#00A1E0",
+    "official_url": "https://www.salesforce.com/service/pricing",
+    "pricing": { "cost_per_agent": 25, "currency": "USD", "period": "annual", "model": "per_user" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true, "display_text": "Case Management" },
+      "voice": { "included": false },
+      "chat": { "included": false },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": false },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "tier": "basic", "display_text": "Process Builder" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": false }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true, "tier": "basic" },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": true },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true, "display_text": "Native" },
+      "native_jira": { "included": false }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "salesforce_professional",
+    "brand_name": "Salesforce",
+    "plan_name": "Professional",
+    "brand_color": "#00A1E0",
+    "official_url": "https://www.salesforce.com/service/pricing",
+    "pricing": { "cost_per_agent": 80, "currency": "USD", "period": "annual", "model": "per_user" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "CTI Integration" },
+      "chat": { "included": false },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": false },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true, "display_text": "Entitlements" },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": true },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": true },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": true },
+      "sandbox": { "included": true },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "salesforce_enterprise",
+    "brand_name": "Salesforce",
+    "plan_name": "Enterprise",
+    "brand_color": "#00A1E0",
+    "official_url": "https://www.salesforce.com/service/pricing",
+    "pricing": { "cost_per_agent": 165, "currency": "USD", "period": "annual", "model": "per_user" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true },
+      "chat": { "included": true, "display_text": "Live Agent" },
+      "sms": { "included": true, "display_text": "Digital Engagement" },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true, "display_text": "Experience Cloud" }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "display_text": "Einstein GPT" },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": true },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": true },
+      "resolution_bot": { "included": true, "display_text": "Einstein Bots" },
+      "agent_copilot": { "included": true }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Flow Builder" },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": true, "display_text": "Omni-Channel" },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": true },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": true },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": true },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": true },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": true },
+      "sandbox": { "included": true, "display_text": "Partial Sandbox" },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": true },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "helpscout_standard",
+    "brand_name": "Help Scout",
+    "plan_name": "Standard",
+    "brand_color": "#1292EE",
+    "official_url": "https://www.helpscout.com/pricing/",
+    "pricing": { "cost_per_agent": 22, "currency": "USD", "period": "annual", "model": "per_user" },
+    "constraints": { "ticket_limit": "Unlimited", "max_seats": 25 },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": true, "display_text": "Beacon" },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": false },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "display_text": "AI Assist" },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Workflows" },
+      "sla_management": { "included": false },
+      "macros": { "included": true, "display_text": "Saved Replies" },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true, "display_text": "Docs" },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true, "limit": "2 Sites" },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": false }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "helpscout_plus",
+    "brand_name": "Help Scout",
+    "plan_name": "Plus",
+    "brand_color": "#1292EE",
+    "official_url": "https://www.helpscout.com/pricing/",
+    "pricing": { "cost_per_agent": 44, "currency": "USD", "period": "annual", "model": "per_user" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": true },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": false },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": true },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Unlimited Rules" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true, "limit": "5 Sites" },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true, "display_text": "SAML" },
+      "ip_restriction": { "included": true },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": true },
+      "data_locality": { "included": false }
+    },
+    "platform": {
+      "custom_objects": { "included": true, "display_text": "Customer Properties" },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "front_starter",
+    "brand_name": "Front",
+    "plan_name": "Starter",
+    "brand_color": "#FF5055",
+    "official_url": "https://front.com/pricing",
+    "pricing": { "cost_per_agent": 19, "currency": "USD", "period": "annual", "model": "per_seat" },
+    "constraints": { "ticket_limit": "Unlimited", "min_seats": 2, "max_seats": 10 },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": false },
+      "social": { "included": true },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Basic Rules" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": false }
+    },
+    "self_service": {
+      "knowledge_base": { "included": false },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true, "display_text": "Basic Analytics" },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": false }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "front_growth",
+    "brand_name": "Front",
+    "plan_name": "Growth",
+    "brand_color": "#FF5055",
+    "official_url": "https://front.com/pricing",
+    "pricing": { "cost_per_agent": 59, "currency": "USD", "period": "annual", "model": "per_seat" },
+    "constraints": { "ticket_limit": "Unlimited", "min_seats": 5 },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "Voice Integration" },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": true },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": true, "display_text": "Smart Rules" },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "intercom_essential",
+    "brand_name": "Intercom",
+    "plan_name": "Essential",
+    "brand_color": "#000000",
+    "official_url": "https://www.intercom.com/pricing",
+    "pricing": { "cost_per_agent": 39, "currency": "USD", "period": "annual", "model": "per_seat" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": true },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": true },
+      "customer_portal": { "included": true, "display_text": "Help Center" }
+    },
+    "ai": {
+      "generative_drafts": { "included": true, "display_text": "Fin AI (Add-on)" },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": true, "tier": "add-on", "display_text": "$0.99/Resolution" },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Workflows" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "intercom_advanced",
+    "brand_name": "Intercom",
+    "plan_name": "Advanced",
+    "brand_color": "#000000",
+    "official_url": "https://www.intercom.com/pricing",
+    "pricing": { "cost_per_agent": 99, "currency": "USD", "period": "annual", "model": "per_seat" },
+    "constraints": { "ticket_limit": "Unlimited" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": true },
+      "sms": { "included": true },
+      "whatsapp": { "included": true },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true },
+      "summarization": { "included": true },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": true },
+      "resolution_bot": { "included": true, "tier": "add-on" },
+      "agent_copilot": { "included": true }
+    },
+    "routing": {
+      "automation_workflows": { "included": true },
+      "sla_management": { "included": true },
+      "macros": { "included": true },
+      "round_robin": { "included": true },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true, "display_text": "Multilingual" },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": true },
+      "multi_brand": { "included": true },
+      "article_versioning": { "included": true }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": true },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": true },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": true },
+      "sandbox": { "included": true },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": true }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "gorgias_starter",
+    "brand_name": "Gorgias",
+    "plan_name": "Starter",
+    "brand_color": "#7633FA",
+    "official_url": "https://www.gorgias.com/pricing",
+    "pricing": { "cost_per_agent": 10, "currency": "USD", "period": "monthly", "model": "flat_fee" },
+    "constraints": { "ticket_limit": "50 Tickets/mo", "tooltip": "Very low volume only" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": true },
+      "sms": { "included": false },
+      "whatsapp": { "included": false },
+      "social": { "included": true, "display_text": "FB/Insta Comments" },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Macros" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": false },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": false },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": false },
+      "agent_activity": { "included": false }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": false },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": false }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": false },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": false }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": false },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  },
+  {
+    "id": "gorgias_pro",
+    "brand_name": "Gorgias",
+    "plan_name": "Pro",
+    "brand_color": "#7633FA",
+    "official_url": "https://www.gorgias.com/pricing",
+    "pricing": { "cost_per_agent": 360, "currency": "USD", "period": "monthly", "model": "flat_fee" },
+    "constraints": { "ticket_limit": 2000, "tooltip": "Includes 2000 tickets/mo" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": true, "display_text": "Add-on" },
+      "chat": { "included": true },
+      "sms": { "included": true, "display_text": "Add-on" },
+      "whatsapp": { "included": true, "display_text": "Add-on" },
+      "social": { "included": true },
+      "customer_portal": { "included": true }
+    },
+    "ai": {
+      "generative_drafts": { "included": true },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": true, "display_text": "Intent Detection" },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": true },
+      "resolution_bot": { "included": true, "tier": "add-on" },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Rules" },
+      "sla_management": { "included": false },
+      "macros": { "included": true },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": true },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": true },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": false },
+      "scheduled_exports": { "included": false },
+      "real_time": { "included": true },
+      "agent_activity": { "included": true }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": false },
+      "hipaa": { "included": false },
+      "data_locality": { "included": false }
+    },
+    "platform": {
+      "custom_objects": { "included": false },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": false },
+      "native_jira": { "included": false }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": true }
+    }
+  },
+  {
+    "id": "customerio_essentials",
+    "brand_name": "Customer.io",
+    "plan_name": "Essentials",
+    "brand_color": "#3D3185",
+    "official_url": "https://customer.io/pricing/",
+    "pricing": { "cost_per_agent": 100, "currency": "USD", "period": "monthly", "model": "flat_fee" },
+    "constraints": { "ticket_limit": "5000 Profiles", "tooltip": "Marketing Automation Focus" },
+    "channels": {
+      "email": { "included": true },
+      "voice": { "included": false },
+      "chat": { "included": false },
+      "sms": { "included": true },
+      "whatsapp": { "included": false },
+      "social": { "included": false },
+      "customer_portal": { "included": false }
+    },
+    "ai": {
+      "generative_drafts": { "included": false },
+      "summarization": { "included": false },
+      "sentiment_analysis": { "included": false },
+      "live_translation": { "included": false },
+      "auto_triage": { "included": false },
+      "resolution_bot": { "included": false },
+      "agent_copilot": { "included": false }
+    },
+    "routing": {
+      "automation_workflows": { "included": true, "display_text": "Visual Workflow" },
+      "sla_management": { "included": false },
+      "macros": { "included": false },
+      "round_robin": { "included": false },
+      "skill_based": { "included": false },
+      "business_hours": { "included": true }
+    },
+    "self_service": {
+      "knowledge_base": { "included": false },
+      "community_forums": { "included": false },
+      "portal_customization": { "included": false },
+      "multi_brand": { "included": true },
+      "article_versioning": { "included": false }
+    },
+    "reporting": {
+      "prebuilt_dashboards": { "included": true },
+      "custom_builder": { "included": true },
+      "scheduled_exports": { "included": true },
+      "real_time": { "included": false },
+      "agent_activity": { "included": false }
+    },
+    "security": {
+      "sso": { "included": false },
+      "ip_restriction": { "included": false },
+      "custom_roles": { "included": true },
+      "audit_logs": { "included": true },
+      "hipaa": { "included": true },
+      "data_locality": { "included": true }
+    },
+    "platform": {
+      "custom_objects": { "included": true },
+      "sandbox": { "included": false },
+      "api_access": { "included": true },
+      "native_salesforce": { "included": true },
+      "native_jira": { "included": false }
+    },
+    "vendor_support": {
+      "email_support": { "included": true },
+      "chat_support": { "included": true },
+      "phone_support": { "included": false },
+      "dedicated_csm": { "included": false },
+      "onboarding_services": { "included": false }
+    }
+  }
+]
