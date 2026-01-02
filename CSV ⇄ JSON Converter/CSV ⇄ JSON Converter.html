@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise CSV ⇄ JSON Converter</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ENTERPRISE THEME --- */
+        :root {
+            --c-bg: #f8fafc;          /* Slate 50 */
+            --c-surface: #ffffff;     /* White */
+            --c-text-main: #0f172a;   /* Slate 900 */
+            --c-text-muted: #64748b;  /* Slate 500 */
+            --c-border: #e2e8f0;      /* Slate 200 */
+            --c-primary: #0f172a;     /* Slate 900 */
+            --c-primary-hover: #1e293b;
+            --c-accent: #3b82f6;      /* Blue 500 */
+            --c-success: #10b981;     /* Emerald 500 */
+            --c-error: #ef4444;       /* Red 500 */
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --radius: 12px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--c-bg);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: var(--font-ui);
+            color: var(--c-text-main);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: calc(100vh - 80px);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* --- HEADER --- */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--c-surface);
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--c-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0f172a, #334155);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-code);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .global-actions { display: flex; gap: 12px; }
+
+        /* --- MAIN GRID --- */
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        @media (max-width: 900px) {
+            .container { height: auto; }
+            .converter-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr auto 1fr;
+                height: 800px;
+            }
+        }
+
+        /* --- EDITOR CARDS --- */
+        .editor-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .editor-card:focus-within {
+            border-color: #94a3b8;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--c-border);
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--c-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .validation-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            transition: background 0.3s;
+        }
+        .validation-dot.valid { background: var(--c-success); box-shadow: 0 0 8px var(--c-success); }
+        .validation-dot.invalid { background: var(--c-error); }
+
+        /* Icon Buttons */
+        .icon-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            color: var(--c-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .icon-btn:hover {
+            background: white;
+            border-color: var(--c-border);
+            color: var(--c-text-main);
+            box-shadow: var(--shadow-sm);
+        }
+        .icon-btn svg { width: 14px; height: 14px; }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--c-border);
+            margin: 0 4px;
+        }
+
+        /* Textarea */
+        .editor-wrapper {
+            flex: 1;
+            position: relative;
+            background: var(--c-surface);
+        }
+        
+        textarea.code-editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 16px;
+            font-family: var(--font-code);
+            font-size: 13px;
+            line-height: 1.6;
+            resize: none;
+            color: var(--c-text-main);
+            outline: none;
+            background: transparent;
+        }
+        
+        textarea.code-editor::placeholder { color: #cbd5e1; }
+
+        /* Footer */
+        .editor-footer {
+            padding: 6px 16px;
+            background: #f8fafc;
+            border-top: 1px solid var(--c-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--c-text-muted);
+            font-family: var(--font-code);
+        }
+
+        /* --- CENTRAL CONTROLS --- */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .convert-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: none;
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            color: var(--c-text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .convert-btn:hover {
+            background: var(--c-primary);
+            color: white;
+            border-color: var(--c-primary);
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .download-trigger {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--c-surface);
+            border: 2px dashed var(--c-border);
+            color: var(--c-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: not-allowed;
+            transition: all 0.2s;
+        }
+
+        .download-trigger.active {
+            border-color: var(--c-success);
+            color: var(--c-success);
+            background: #ecfdf5;
+            cursor: pointer;
+        }
+        .download-trigger.active:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #fff;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            border: 1px solid var(--c-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999;
+        }
+        #toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #toast.error { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+        #toast.success { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+
+        input[type="file"] { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="toast"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="title-group">
+                <div class="title-icon">{ }</div>
+                <h1>CSV ⇄ JSON Converter</h1>
+            </div>
+            <div class="global-actions">
+                <button class="icon-btn" onclick="loadSample()" style="width:auto; padding:0 12px; font-weight:500; font-family:var(--font-ui); font-size:13px;">
+                    Load Sample
+                </button>
+            </div>
+        </div>
+
+        <div class="converter-grid">
+            
+            <div class="editor-card">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="label">JSON <div class="validation-dot" id="jsonDot" title="Validation Status"></div></div>
+                    </div>
+                    <div class="toolbar-left">
+                        <label class="icon-btn" title="Upload File">
+                            <input type="file" id="jsonFile" accept=".json,.txt">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        </label>
+                        <button class="icon-btn" onclick="copyContent('jsonInput', this)" title="Copy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="clearBox('jsonInput')" title="Clear">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="editor-wrapper">
+                    <textarea id="jsonInput" class="code-editor" placeholder="{ ... }" spellcheck="false"></textarea>
+                </div>
+                <div class="editor-footer">
+                    <span id="jsonLines">0 lines</span>
+                    <span id="jsonChars">0 chars</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="convert-btn" id="toCsv" title="Convert JSON to CSV">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+                
+                <button class="convert-btn" id="toJson" title="Convert CSV to JSON" style="transform: rotate(180deg);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+
+                <div style="height: 20px"></div>
+
+                <button class="download-trigger" id="downloadBtn" title="Download Result">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </button>
+            </div>
+
+            <div class="editor-card">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="label">CSV <div class="validation-dot" id="csvDot" title="Validation Status"></div></div>
+                    </div>
+                    <div class="toolbar-left">
+                        <label class="icon-btn" title="Upload File">
+                            <input type="file" id="csvFile" accept=".csv,.txt">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        </label>
+                        <button class="icon-btn" onclick="copyContent('csvInput', this)" title="Copy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="clearBox('csvInput')" title="Clear">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="editor-wrapper">
+                    <textarea id="csvInput" class="code-editor" placeholder="id,name,email..." spellcheck="false"></textarea>
+                </div>
+                <div class="editor-footer">
+                    <span id="csvLines">0 lines</span>
+                    <span id="csvChars">0 chars</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- 1. ROBUST CSV ENGINE ---
+        const RobustCSV = {
+            unparse: function(data) {
+                if (!data || data.length === 0) return "";
+                const headers = new Set();
+                data.forEach(obj => Object.keys(obj).forEach(k => headers.add(k)));
+                const headerArr = Array.from(headers);
+                const csvRows = [headerArr.join(',')];
+                
+                for (const row of data) {
+                    const values = headerArr.map(header => {
+                        let val = row[header];
+                        if (val === null || val === undefined) val = "";
+                        val = String(val);
+                        // Escape quotes and wrap if necessary
+                        if (val.search(/("|,|\n|\r)/g) >= 0) {
+                            val = '"' + val.replace(/"/g, '""') + '"';
+                        }
+                        return val;
+                    });
+                    csvRows.push(values.join(','));
+                }
+                return csvRows.join('\n');
+            },
+            parse: function(text) {
+                const arr = [];
+                let row = [], col = "", inQuote = false;
+                for (let i = 0; i < text.length; i++) {
+                    let c = text[i], next = text[i+1];
+                    if (inQuote) {
+                        if (c === '"' && next === '"') { col += '"'; i++; }
+                        else if (c === '"') inQuote = false;
+                        else col += c;
+                    } else {
+                        if (c === '"') inQuote = true;
+                        else if (c === ',') { row.push(col); col = ""; }
+                        else if (c === '\r' || c === '\n') {
+                            row.push(col); col = "";
+                            if (row.length > 0) arr.push(row);
+                            row = [];
+                            if (c === '\r' && next === '\n') i++;
+                        } else col += c;
+                    }
+                }
+                if (col || row.length > 0) { row.push(col); arr.push(row); }
+                if(arr.length < 2) return [];
+                
+                const headers = arr[0];
+                const json = [];
+                for (let i = 1; i < arr.length; i++) {
+                    if (arr[i].length === 1 && arr[i][0] === "") continue;
+                    let obj = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        let val = arr[i][j];
+                        // Auto-detect types
+                        if (val && !isNaN(val) && val.trim() !== "") val = Number(val);
+                        if (val === "true") val = true;
+                        if (val === "false") val = false;
+                        obj[headers[j]] = val;
+                    }
+                    json.push(obj);
+                }
+                return json;
+            }
+        };
+
+        // --- 2. UI CONTROLLER ---
+        let downloadType = null;
+        const els = {
+            json: document.getElementById('jsonInput'),
+            csv: document.getElementById('csvInput'),
+            toast: document.getElementById('toast'),
+            btnDownload: document.getElementById('downloadBtn'),
+            jsonDot: document.getElementById('jsonDot'),
+            csvDot: document.getElementById('csvDot')
+        };
+
+        // Utilities
+        function showToast(msg, type = 'error') {
+            els.toast.textContent = (type === 'error' ? '⚠️ ' : '✅ ') + msg;
+            els.toast.className = `visible ${type}`;
+            setTimeout(() => els.toast.className = '', 3000);
+        }
+
+        window.updateStats = () => {
+            ['json', 'csv'].forEach(type => {
+                const val = els[type].value;
+                document.getElementById(`${type}Chars`).innerText = val.length.toLocaleString() + " chars";
+                document.getElementById(`${type}Lines`).innerText = (val.match(/\n/g) || []).length + 1 + " lines";
+            });
+        };
+
+        window.clearBox = (id) => {
+            document.getElementById(id).value = '';
+            window.updateStats();
+            validateInput(id === 'jsonInput' ? 'json' : 'csv');
+            els.btnDownload.classList.remove('active');
+        };
+
+        window.copyContent = (id, btn) => {
+            const el = document.getElementById(id);
+            if(!el.value) return;
+            el.select();
+            navigator.clipboard.writeText(el.value);
+            const original = btn.innerHTML;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            setTimeout(() => btn.innerHTML = original, 1500);
+        };
+
+        // Improved Sample Data
+        window.loadSample = () => {
+            const sample = [
+                {
+                    "employeeId": "EMP-1001",
+                    "fullName": "Sarah Conner",
+                    "department": "Engineering",
+                    "isActive": true,
+                    "contact": { "email": "sarah@tech.co", "phone": "+1-555-0100" },
+                    "roles": ["admin", "dev"],
+                    "lastLogin": "2023-10-25T08:30:00Z"
+                },
+                {
+                    "employeeId": "EMP-1002",
+                    "fullName": "John Smith",
+                    "department": "Marketing",
+                    "isActive": false,
+                    "contact": { "email": "john@tech.co", "phone": null },
+                    "roles": ["viewer"],
+                    "lastLogin": null
+                }
+            ];
+            els.json.value = JSON.stringify(sample, null, 2);
+            els.csv.value = "";
+            window.updateStats();
+            validateInput('json');
+            els.btnDownload.classList.remove('active');
+        };
+
+        function flattenObject(obj, prefix = '', res = {}) {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const val = obj[key];
+                    const newKey = prefix ? prefix + '.' + key : key;
+                    if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+                        flattenObject(val, newKey, res);
+                    } else {
+                        res[newKey] = Array.isArray(val) ? val.join(';') : val; // Flatten arrays to string
+                    }
+                }
+            }
+            return res;
+        }
+
+        // --- CONVERSION ---
+        document.getElementById('toCsv').addEventListener('click', () => {
+            const val = els.json.value.trim();
+            if(!val) return showToast("Enter JSON first");
+            try {
+                let jsonData = JSON.parse(val);
+                if (!Array.isArray(jsonData)) jsonData = [jsonData];
+                
+                // Flatten nested objects before conversion
+                const flattened = jsonData.map(item => flattenObject(item));
+                
+                els.csv.value = RobustCSV.unparse(flattened);
+                
+                window.updateStats();
+                downloadType = 'csv';
+                els.btnDownload.classList.add('active');
+                validateInput('csv');
+                validateInput('json');
+                showToast("Converted to CSV", "success");
+            } catch(e) { showToast(e.message); }
+        });
+
+        document.getElementById('toJson').addEventListener('click', () => {
+            const val = els.csv.value.trim();
+            if(!val) return showToast("Enter CSV first");
+            try {
+                const res = RobustCSV.parse(val);
+                els.json.value = JSON.stringify(res, null, 2);
+                
+                window.updateStats();
+                downloadType = 'json';
+                els.btnDownload.classList.add('active');
+                validateInput('csv');
+                validateInput('json');
+                showToast("Converted to JSON", "success");
+            } catch(e) { showToast(e.message); }
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if(!downloadType) return;
+            const content = downloadType === 'json' ? els.json.value : els.csv.value;
+            const mime = downloadType === 'json' ? 'application/json' : 'text/csv';
+            const blob = new Blob([content], { type: mime });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `data.${downloadType}`;
+            link.click();
+        });
+
+        // --- VALIDATION & FILES ---
+        function validateInput(type) {
+            const val = els[type].value.trim();
+            const dot = els[type + 'Dot'];
+            if(!val) { dot.className = 'validation-dot'; return; }
+            
+            let valid = false;
+            try {
+                if(type === 'json') JSON.parse(val) ? valid = true : valid = false;
+                else {
+                    // Simple CSV check (looks for comma or newline)
+                    (val.includes(',') || val.includes('\n')) ? valid = true : valid = false;
+                }
+            } catch(e) { valid = false; }
+
+            dot.className = `validation-dot ${valid ? 'valid' : 'invalid'}`;
+        }
+
+        ['json', 'csv'].forEach(type => {
+            const fileInput = document.getElementById(`${type}File`);
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if(!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    els[type].value = ev.target.result;
+                    window.updateStats();
+                    validateInput(type);
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            });
+            
+            els[type].addEventListener('input', () => {
+                window.updateStats();
+                validateInput(type);
+                els.btnDownload.classList.remove('active');
+                downloadType = null;
+            });
+        });
+
+    </script>
+</body>
+</html>
